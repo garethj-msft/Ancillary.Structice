@@ -5,42 +5,40 @@ using System.Text;
 
 namespace Ancillary.Structice
 {
-    public class PriorityQueue<TKey, TValue> 
+    public class PriorityQueue<TPriority, TValue> 
     {
         const int defaultSize = 20;
-        private IComparer<TKey> comparer;
-        private KeyValuePair<TKey, TValue>[] content = null;
+        private IComparer<TPriority> comparer;
+        private KeyValuePair<TPriority, TValue>[] content = null;
         private int size = 0;
 
         public PriorityQueue() : 
-            this(Comparer<TKey>.Default)
+            this(Comparer<TPriority>.Default)
         {
         }
 
-        public PriorityQueue(IComparer<TKey> comparer)
+        public PriorityQueue(IComparer<TPriority> comparer)
         {
             if (comparer == null) throw new ArgumentNullException(nameof(comparer));
             this.comparer = comparer;
-
-            Queue<int> q;
         }
 
-        public void Enqueue(TKey key, TValue value)
+        public void Enqueue(TPriority key, TValue value)
         {
             if (content == null)
             {
-                content = new KeyValuePair<TKey, TValue>[defaultSize];
+                content = new KeyValuePair<TPriority, TValue>[defaultSize];
             }
             if (content.Length == size)
             {
                 ReallocateUp();
             }
-            content[size] = new KeyValuePair<TKey, TValue>(key, value);
+            content[size] = new KeyValuePair<TPriority, TValue>(key, value);
             HeapifyUp(size);
             size++;
         }
 
-        public KeyValuePair<TKey, TValue>? Dequeue()
+        public KeyValuePair<TPriority, TValue>? Dequeue()
         {
             if (size == 0)
             {
@@ -53,7 +51,7 @@ namespace Ancillary.Structice
             }
             else
             {
-                KeyValuePair<TKey, TValue> retVal = content[0];
+                KeyValuePair<TPriority, TValue> retVal = content[0];
                 size--;
                 content[0] = content[size];
                 HeapifyDown(0);
@@ -65,7 +63,7 @@ namespace Ancillary.Structice
             }
         }
 
-        public KeyValuePair<TKey, TValue>? Peek()
+        public KeyValuePair<TPriority, TValue>? Peek()
         {
             if (size == 0)
             {
@@ -146,24 +144,24 @@ namespace Ancillary.Structice
 
         private void Swap(int location, int parentLocation)
         {
-            KeyValuePair<TKey, TValue> temp = content[parentLocation];
+            KeyValuePair<TPriority, TValue> temp = content[parentLocation];
             content[parentLocation] = content[location];
             content[location] = temp;
         }
 
         private void ReallocateUp()
         {
-            KeyValuePair<TKey, TValue>[] old = content;
-            content = new KeyValuePair<TKey, TValue>[size * 2];
+            KeyValuePair<TPriority, TValue>[] old = content;
+            content = new KeyValuePair<TPriority, TValue>[size * 2];
             old.CopyTo(content, 0);
         }
         private void ReallocateDown()
         {
-            KeyValuePair<TKey, TValue>[] old = content;
+            KeyValuePair<TPriority, TValue>[] old = content;
             int newSize = ((size / defaultSize) + 1) * defaultSize;
             if (newSize != content.Length)
             {
-                content = new KeyValuePair<TKey, TValue>[newSize];
+                content = new KeyValuePair<TPriority, TValue>[newSize];
                 Array.Copy(old, content, newSize);
             }
         }
