@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ancillary.Structice", "Ancillary.Structice\Ancillary.Structice.csproj", "{B87F7043-F61B-422C-9E98-0406B3234342}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Ancillary.Structice", "Test.Ancillary.Structice\Test.Ancillary.Structice.csproj", "{458CE9B9-65D6-448C-8E78-A60A0085B0EE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{B87F7043-F61B-422C-9E98-0406B3234342}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B87F7043-F61B-422C-9E98-0406B3234342}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B87F7043-F61B-422C-9E98-0406B3234342}.Release|Any CPU.Build.0 = Release|Any CPU
+		{458CE9B9-65D6-448C-8E78-A60A0085B0EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{458CE9B9-65D6-448C-8E78-A60A0085B0EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{458CE9B9-65D6-448C-8E78-A60A0085B0EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{458CE9B9-65D6-448C-8E78-A60A0085B0EE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
