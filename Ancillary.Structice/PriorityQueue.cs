@@ -23,7 +23,7 @@ namespace Ancillary.Structice
             this.comparer = comparer;
         }
 
-        public void Enqueue(TPriority key, TValue value)
+        public void Enqueue(TPriority priority, TValue value)
         {
             if (content == null)
             {
@@ -33,7 +33,7 @@ namespace Ancillary.Structice
             {
                 ReallocateUp();
             }
-            content[size] = new KeyValuePair<TPriority, TValue>(key, value);
+            content[size] = new KeyValuePair<TPriority, TValue>(priority, value);
             HeapifyUp(size);
             size++;
         }
