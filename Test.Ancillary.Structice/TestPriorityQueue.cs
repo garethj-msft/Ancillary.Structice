@@ -27,22 +27,22 @@ namespace Test.Ancillary.Structice
         }
 
         [TestMethod]
-        public void RandomInsertCheckOrderedExtract()
+        public void RandomEnqueueCheckOrderedDequeue()
         {
             var queue = new PriorityQueue<int, string>();
-            queue.Insert(100, "One Hundred");
-            queue.Insert(1, "One");
-            queue.Insert(5, "Five");
-            queue.Insert(75, "Seventy Five");
-            queue.Insert(32, "Thirty Two");
-            queue.Insert(64, "Sixty Four");
-            queue.Insert(18, "Eighteen");
+            queue.Enqueue(100, "One Hundred");
+            queue.Enqueue(1, "One");
+            queue.Enqueue(5, "Five");
+            queue.Enqueue(75, "Seventy Five");
+            queue.Enqueue(32, "Thirty Two");
+            queue.Enqueue(64, "Sixty Four");
+            queue.Enqueue(18, "Eighteen");
             TestContext.WriteLine(@"Initial: " + queue.Dump());
             TestContext.WriteLine("");
 
             KeyValuePair<int, string>? value;
             int priority = Int32.MaxValue;
-            while ( (value = queue.Extract()).HasValue)
+            while ( (value = queue.Dequeue()).HasValue)
             {
                 TestContext.WriteLine(value.Value.Value);
                 TestContext.WriteLine(@"    " + queue.Dump());

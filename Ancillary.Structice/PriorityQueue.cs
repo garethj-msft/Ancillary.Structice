@@ -19,10 +19,13 @@ namespace Ancillary.Structice
 
         public PriorityQueue(IComparer<TKey> comparer)
         {
+            if (comparer == null) throw new ArgumentNullException(nameof(comparer));
             this.comparer = comparer;
+
+            Queue<int> q;
         }
 
-        public void Insert(TKey key, TValue value)
+        public void Enqueue(TKey key, TValue value)
         {
             if (content == null)
             {
@@ -37,7 +40,7 @@ namespace Ancillary.Structice
             size++;
         }
 
-        public KeyValuePair<TKey, TValue>? Extract()
+        public KeyValuePair<TKey, TValue>? Dequeue()
         {
             if (size == 0)
             {
@@ -79,6 +82,8 @@ namespace Ancillary.Structice
             size = 0;
             content = null;
         }
+
+        public int Count { get { return size; } }
 
         private void HeapifyDown(int location)
         {
