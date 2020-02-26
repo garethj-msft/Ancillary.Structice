@@ -1,110 +1,124 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// <copyright file="PriorityQueue.cs" >
+// © Gareth Jones. All rights reserved.
+// </copyright>
 
 namespace Ancillary.Structice
 {
-    public class PriorityQueue<TPriority, TValue> 
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
+    /// <summary>
+    /// Heap-based priority queue.
+    /// </summary>
+    /// <typeparam name="TPriority">Type to prioritize upon.</typeparam>
+    /// <typeparam name="TValue">Type contained in the queue.</typeparam>
+    public class PriorityQueue<TPriority, TValue> where TPriority : IComparable<TPriority>
     {
-        const int defaultSize = 20;
-        private IComparer<TPriority> comparer;
-        private KeyValuePair<TPriority, TValue>[] content = null;
-        private int size = 0;
+        private const int DefaultSize = 20;
+        private (TPriority priority, TValue value)[] content;
 
-        public PriorityQueue() : 
-            this(Comparer<TPriority>.Default)
-        {
-        }
-
-        public PriorityQueue(IComparer<TPriority> comparer)
-        {
-            if (comparer == null) throw new ArgumentNullException(nameof(comparer));
-            this.comparer = comparer;
-        }
-
+        /// <summary>
+        /// Add an entry to the queue with the given priority.
+        /// </summary>
+        /// <param name="priority">The priority to provide.</param>
+        /// <param name="value">The entry to add.</param>
         public void Enqueue(TPriority priority, TValue value)
         {
-            if (content == null)
+            if (this.content == null)
             {
-                content = new KeyValuePair<TPriority, TValue>[defaultSize];
+                this.content = new (TPriority, TValue)[DefaultSize];
             }
-            if (content.Length == size)
+
+            if (this.content.Length == this.Count)
             {
-                ReallocateUp();
+                this.ReallocateUp();
             }
-            content[size] = new KeyValuePair<TPriority, TValue>(priority, value);
-            HeapifyUp(size);
-            size++;
+
+            this.content[this.Count] = (priority, value);
+            this.HeapifyUp(this.Count);
+            this.Count++;
         }
 
-        public KeyValuePair<TPriority, TValue>? Dequeue()
+        /// <summary>
+        /// Take an entry from the queue.
+        /// </summary>
+        /// <returns>The entry.</returns>
+        public (TPriority priority, TValue value)? Dequeue()
         {
-            if (size == 0)
+            if (this.Count == 0)
             {
                 return null;
             }
-            else if (size == 1)
+            else if (this.Count == 1)
             {
-                size = 0;
-                return content[0];
+                this.Count = 0;
+                return this.content[0];
             }
             else
             {
-                KeyValuePair<TPriority, TValue> retVal = content[0];
-                size--;
-                content[0] = content[size];
-                HeapifyDown(0);
-                if ((content.Length / 2) - size == 1)
+                (TPriority, TValue) retVal = this.content[0];
+                this.Count--;
+                this.content[0] = this.content[this.Count];
+                this.HeapifyDown(0);
+                if ((this.content.Length / 2) - this.Count == 1)
                 {
-                    ReallocateDown();
+                    this.ReallocateDown();
                 }
                 return retVal;
             }
         }
 
-        public KeyValuePair<TPriority, TValue>? Peek()
+        /// <summary>
+        /// Look at the next entry on the queue without removing it.
+        /// </summary>
+        /// <returns>The entry.</returns>
+        public (TPriority priority, TValue value)? Peek()
         {
-            if (size == 0)
+            if (this.Count == 0)
             {
                 return null;
             }
             else
             {
-                return content[0];
+                return this.content[0];
             }
         }
 
+        /// <summary>
+        /// Clear the queue.
+        /// </summary>
         public void Clear()
         {
-            size = 0;
-            content = null;
+            this.Count = 0;
+            this.content = null;
         }
 
-        public int Count { get { return size; } }
+        /// <summary>
+        /// Number of entries in the queue.
+        /// </summary>
+        public int Count { get; private set; }
 
         private void HeapifyDown(int location)
         {
             int leftChildLocation = LeftChild(location);
             int rightChildLocation = RightChild(location);
-            int leftComparison = 0;
-            int rightComparison = 0;
-            while (leftChildLocation < size) 
+            while (leftChildLocation < this.Count) 
             {
                 int moveLocation = location;
-                if (leftChildLocation < size && (leftComparison = comparer.Compare(content[leftChildLocation].Key, content[location].Key)) > 0)
+                if (leftChildLocation < this.Count && this.content[leftChildLocation].priority.CompareTo(this.content[location].priority) > 0)
                 {
                     moveLocation = leftChildLocation;
                 }
                 // Be sure to compare with the move location to give priority to the most different.
-                if (rightChildLocation < size && (rightComparison = comparer.Compare(content[rightChildLocation].Key, content[moveLocation].Key)) > 0)
+                if (rightChildLocation < this.Count && this.content[rightChildLocation].priority.CompareTo(this.content[moveLocation].priority) > 0)
                 {
                     moveLocation = rightChildLocation;
                 }
 
                 if (moveLocation != location)
-                { 
-                    Swap(location, moveLocation);
+                {
+                    this.Swap(location, moveLocation);
                     location = moveLocation;
                 }
                 else
@@ -119,81 +133,80 @@ namespace Ancillary.Structice
         private void HeapifyUp(int location)
         {
             int parentLocation = Parent(location);
-            while (comparer.Compare(content[location].Key, content[parentLocation].Key) > 0)
+            while (this.content[location].priority.CompareTo(this.content[parentLocation].priority) > 0)
             {
-                Swap(location, parentLocation);
+                this.Swap(location, parentLocation);
                 location = parentLocation;
                 parentLocation = Parent(location); 
             } 
         }
 
-        private static int Parent(int location)
-        {
-            return (location - 1) / 2;
-        }
+        private static int Parent(int location) => (location - 1) / 2;
 
-        private static int LeftChild(int location)
-        {
-            return ((location + 1) * 2) - 1;
-        }
+        private static int LeftChild(int location) => ((location + 1) * 2) - 1;
 
-        private static int RightChild(int location)
-        {
-            return ((location + 1) * 2);
-        }
+        private static int RightChild(int location) => ((location + 1) * 2);
 
         private void Swap(int location, int parentLocation)
         {
-            KeyValuePair<TPriority, TValue> temp = content[parentLocation];
-            content[parentLocation] = content[location];
-            content[location] = temp;
+            (TPriority, TValue) temp = this.content[parentLocation];
+            this.content[parentLocation] = this.content[location];
+            this.content[location] = temp;
         }
 
         private void ReallocateUp()
         {
-            KeyValuePair<TPriority, TValue>[] old = content;
-            content = new KeyValuePair<TPriority, TValue>[size * 2];
-            old.CopyTo(content, 0);
+            (TPriority priority, TValue value)[] old = this.content;
+            this.content = new (TPriority priority, TValue value)[this.Count * 2];
+            old.CopyTo(this.content, 0);
         }
+
         private void ReallocateDown()
         {
-            KeyValuePair<TPriority, TValue>[] old = content;
-            int newSize = ((size / defaultSize) + 1) * defaultSize;
-            if (newSize != content.Length)
+            (TPriority priority, TValue value)[] old = this.content;
+            int newSize = ((this.Count / DefaultSize) + 1) * DefaultSize;
+            if (newSize != this.content.Length)
             {
-                content = new KeyValuePair<TPriority, TValue>[newSize];
-                Array.Copy(old, content, newSize);
+                this.content = new (TPriority priority, TValue value)[newSize];
+                Array.Copy(old, this.content, newSize);
             }
         }
 
 #if DEBUG
+        /// <summary>
+        /// Write a verbose string representation of the queue.
+        /// </summary>
+        /// <returns>The representation.</returns>
         public string Dump()
         {
             int count = 0;
             int lineCount = 0;
             int rowCount = 0;
-            string dump = string.Empty;
-            while (count < size)
+            var dump = new StringBuilder();
+            while (count < this.Count)
             {
-                if ((count+1) == (Math.Pow(2,rowCount)))
+                if (count + 1 == (int)Math.Pow(2, rowCount))
                 {
                     if (rowCount != 0)
                     {
-                        dump += Environment.NewLine;
+                        dump.AppendLine();
                     }
                     rowCount++;
                     lineCount = 0;
                 }
+
                 if (lineCount != 0)
                 {
-                    dump += ", ";
+                    dump.Append(", ");
                 }
-                var p = content[count];
-                dump += p.Key + ":" + p.Value;
+
+                var (priority, value) = this.content[count];
+                dump.Append($"{priority}:{value}");
                 count++;
                 lineCount++;
             }
-            return dump;
+
+            return dump.ToString();
         }
 #endif
     }

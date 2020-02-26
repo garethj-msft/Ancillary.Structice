@@ -1,44 +1,50 @@
-﻿using System;
+﻿// <copyright file="StringUtilities.cs" >
+// © Gareth Jones. All rights reserved.
+// </copyright>
+
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ancillary.Structice.Utilities
 {
+    using System;
+
+    /// <summary>
+    /// Simple extra utilities for working with strings.
+    /// </summary>
     public static class StringUtilities
     {
-
-        public static IEnumerable<IGrouping<string, string>> ThenSplit(this string[] theList, char separator)
+        /// <summary>
+        /// Split a set of strings into groups split on the given character.
+        /// </summary>
+        /// <param name="stringSet">Set of strings.</param>
+        /// <param name="separator">Character to split on.</param>
+        /// <returns></returns>
+        public static IEnumerable<IGrouping<string, string>> ThenSplit(this IEnumerable<string> stringSet, char separator)
         {
-            foreach (string entry in theList)
-            {
-                yield return new GroupedEnumerable(entry, entry.Split(separator));
-            }
+            _ = stringSet ?? throw new ArgumentNullException(nameof(stringSet));
+            return stringSet.Select(entry => new Grouping<string, string>(entry, entry.Split(separator)));
         }
 
-        internal class GroupedEnumerable : IGrouping<string, string>
+        /// <summary>
+        /// Simple class to wrap a group of elements with a key.
+        /// </summary>
+        internal class Grouping<TKey, TElement> : IGrouping<TKey, TElement>
         {
-            public string Key { get; private set; }
+            public TKey Key { get; }
 
-            private string[] Values { get; set; }
+            private IEnumerable<TElement> Values { get; }
 
-            internal GroupedEnumerable(string key, string[] values)
+            internal Grouping(TKey key, IEnumerable<TElement> values)
             {
                 this.Key = key;
                 this.Values =  values;
             }
 
-            public IEnumerator<string> GetEnumerator()
-            {
-                return ((IEnumerable<string>)this.Values).GetEnumerator();
-            }
+            public IEnumerator<TElement> GetEnumerator() => this.Values.GetEnumerator();
 
-            IEnumerator IEnumerable.GetEnumerator()
-            {
-                return this.Values.GetEnumerator();
-            }
+            IEnumerator IEnumerable.GetEnumerator() => this.Values.GetEnumerator();
         }
     }
 }
