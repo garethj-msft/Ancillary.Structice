@@ -16,7 +16,28 @@ namespace Ancillary.Structice
         where TPriority : IComparable<TPriority>
     {
         private const int DefaultSize = 20;
+
+        /// <summary>
+        /// The array that the queue's values are stored in.
+        /// </summary>
+        /// <remarks>Valid values are in elements from 0 to Count - 1.</remarks>
         private (TPriority priority, TValue value)[] content;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PriorityQueue{TPriority, TValue}"/> class.
+        /// </summary>
+        public PriorityQueue()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PriorityQueue{TPriority, TValue}"/> class.
+        /// </summary>
+        /// <param name="initialSize">The starting size of the storage that the queue is based on.</param>
+        public PriorityQueue(int initialSize)
+        {
+            this.content = new (TPriority, TValue)[initialSize];
+        }
 
         /// <summary>
         /// Gets the number of entries in the queue.
