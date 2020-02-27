@@ -1,4 +1,4 @@
-﻿// <copyright file="PriorityQueue.cs" >
+﻿// <copyright file="PriorityQueue.cs" company="Gareth Jones">
 // © Gareth Jones. All rights reserved.
 // </copyright>
 
@@ -13,10 +13,16 @@ namespace Ancillary.Structice
     /// </summary>
     /// <typeparam name="TPriority">Type to prioritize upon.</typeparam>
     /// <typeparam name="TValue">Type contained in the queue.</typeparam>
-    public class PriorityQueue<TPriority, TValue> where TPriority : IComparable<TPriority>
+    public class PriorityQueue<TPriority, TValue>
+        where TPriority : IComparable<TPriority>
     {
         private const int DefaultSize = 20;
         private (TPriority priority, TValue value)[] content;
+
+        /// <summary>
+        /// Gets the number of entries in the queue.
+        /// </summary>
+        public int Count { get; private set; }
 
         /// <summary>
         /// Add an entry to the queue with the given priority.
@@ -65,6 +71,7 @@ namespace Ancillary.Structice
                 {
                     this.ReallocateDown();
                 }
+
                 return retVal;
             }
         }
@@ -94,22 +101,63 @@ namespace Ancillary.Structice
             this.content = null;
         }
 
+#if DEBUG
         /// <summary>
-        /// Number of entries in the queue.
+        /// Write a verbose string representation of the queue.
         /// </summary>
-        public int Count { get; private set; }
+        /// <returns>The representation.</returns>
+        public string Dump()
+        {
+            int count = 0;
+            int lineCount = 0;
+            int rowCount = 0;
+            var dump = new StringBuilder();
+            while (count < this.Count)
+            {
+                if (count + 1 == (int)Math.Pow(2, rowCount))
+                {
+                    if (rowCount != 0)
+                    {
+                        dump.AppendLine();
+                    }
+
+                    rowCount++;
+                    lineCount = 0;
+                }
+
+                if (lineCount != 0)
+                {
+                    dump.Append(", ");
+                }
+
+                var (priority, value) = this.content[count];
+                dump.Append($"{priority}:{value}");
+                count++;
+                lineCount++;
+            }
+
+            return dump.ToString();
+        }
+#endif
+
+        private static int Parent(int location) => (location - 1) / 2;
+
+        private static int LeftChild(int location) => ((location + 1) * 2) - 1;
+
+        private static int RightChild(int location) => (location + 1) * 2;
 
         private void HeapifyDown(int location)
         {
             int leftChildLocation = LeftChild(location);
             int rightChildLocation = RightChild(location);
-            while (leftChildLocation < this.Count) 
+            while (leftChildLocation < this.Count)
             {
                 int moveLocation = location;
                 if (leftChildLocation < this.Count && this.content[leftChildLocation].priority.CompareTo(this.content[location].priority) > 0)
                 {
                     moveLocation = leftChildLocation;
                 }
+
                 // Be sure to compare with the move location to give priority to the most different.
                 if (rightChildLocation < this.Count && this.content[rightChildLocation].priority.CompareTo(this.content[moveLocation].priority) > 0)
                 {
@@ -125,6 +173,7 @@ namespace Ancillary.Structice
                 {
                     break;
                 }
+
                 leftChildLocation = LeftChild(location);
                 rightChildLocation = RightChild(location);
             }
@@ -137,15 +186,9 @@ namespace Ancillary.Structice
             {
                 this.Swap(location, parentLocation);
                 location = parentLocation;
-                parentLocation = Parent(location); 
-            } 
+                parentLocation = Parent(location);
+            }
         }
-
-        private static int Parent(int location) => (location - 1) / 2;
-
-        private static int LeftChild(int location) => ((location + 1) * 2) - 1;
-
-        private static int RightChild(int location) => ((location + 1) * 2);
 
         private void Swap(int location, int parentLocation)
         {
@@ -171,43 +214,5 @@ namespace Ancillary.Structice
                 Array.Copy(old, this.content, newSize);
             }
         }
-
-#if DEBUG
-        /// <summary>
-        /// Write a verbose string representation of the queue.
-        /// </summary>
-        /// <returns>The representation.</returns>
-        public string Dump()
-        {
-            int count = 0;
-            int lineCount = 0;
-            int rowCount = 0;
-            var dump = new StringBuilder();
-            while (count < this.Count)
-            {
-                if (count + 1 == (int)Math.Pow(2, rowCount))
-                {
-                    if (rowCount != 0)
-                    {
-                        dump.AppendLine();
-                    }
-                    rowCount++;
-                    lineCount = 0;
-                }
-
-                if (lineCount != 0)
-                {
-                    dump.Append(", ");
-                }
-
-                var (priority, value) = this.content[count];
-                dump.Append($"{priority}:{value}");
-                count++;
-                lineCount++;
-            }
-
-            return dump.ToString();
-        }
-#endif
     }
 }

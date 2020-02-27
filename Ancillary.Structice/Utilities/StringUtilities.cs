@@ -1,14 +1,13 @@
-﻿// <copyright file="StringUtilities.cs" >
+﻿// <copyright file="StringUtilities.cs" company="Gareth Jones">
 // © Gareth Jones. All rights reserved.
 // </copyright>
-
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Ancillary.Structice.Utilities
 {
     using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
 
     /// <summary>
     /// Simple extra utilities for working with strings.
@@ -20,7 +19,7 @@ namespace Ancillary.Structice.Utilities
         /// </summary>
         /// <param name="stringSet">Set of strings.</param>
         /// <param name="separator">Character to split on.</param>
-        /// <returns></returns>
+        /// <returns>The groups.</returns>
         public static IEnumerable<IGrouping<string, string>> ThenSplit(this IEnumerable<string> stringSet, char separator)
         {
             _ = stringSet ?? throw new ArgumentNullException(nameof(stringSet));
@@ -30,20 +29,38 @@ namespace Ancillary.Structice.Utilities
         /// <summary>
         /// Simple class to wrap a group of elements with a key.
         /// </summary>
+        /// <typeparam name="TKey">The type of the key of the group.</typeparam>
+        /// <typeparam name="TElement">The type of the elements in the group.</typeparam>
         internal class Grouping<TKey, TElement> : IGrouping<TKey, TElement>
         {
+            /// <summary>
+            /// Initializes a new instance of the <see cref="Grouping{TKey, TElement}"/> class.
+            /// </summary>
+            /// <param name="key">The key of the group.</param>
+            /// <param name="values">The elements to wrap in a group.</param>
+            internal Grouping(TKey key, IEnumerable<TElement> values)
+            {
+                this.Key = key;
+                this.Values = values;
+            }
+
+            /// <summary>
+            /// Gets the key of the group.
+            /// </summary>
             public TKey Key { get; }
 
             private IEnumerable<TElement> Values { get; }
 
-            internal Grouping(TKey key, IEnumerable<TElement> values)
-            {
-                this.Key = key;
-                this.Values =  values;
-            }
-
+            /// <summary>
+            /// Get the enumerator of the elements.
+            /// </summary>
+            /// <returns>The enumerator.</returns>
             public IEnumerator<TElement> GetEnumerator() => this.Values.GetEnumerator();
 
+            /// <summary>
+            /// Get the enumerator of the elements.
+            /// </summary>
+            /// <returns>The enumerator.</returns>
             IEnumerator IEnumerable.GetEnumerator() => this.Values.GetEnumerator();
         }
     }

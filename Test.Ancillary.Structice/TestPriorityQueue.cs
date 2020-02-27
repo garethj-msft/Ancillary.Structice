@@ -32,18 +32,18 @@ namespace Test.Ancillary.Structice
             queue.Enqueue(32, "Thirty Two");
             queue.Enqueue(64, "Sixty Four");
             queue.Enqueue(18, "Eighteen");
-            TestContext.WriteLine(@"Initial: " + queue.Dump());
-            TestContext.WriteLine("");
+            this.TestContext.WriteLine(@"Initial: " + queue.Dump());
+            this.TestContext.WriteLine("");
 
-            KeyValuePair<int, string>? value;
-            int priority = Int32.MaxValue;
+            (int priority, string value)? value;
+            int priority = int.MaxValue;
             while ( (value = queue.Dequeue()).HasValue)
             {
-                this.TestContext.WriteLine(value.Value.Value);
+                this.TestContext.WriteLine(value.Value.value);
                 this.TestContext.WriteLine(@"    " + queue.Dump());
                 this.TestContext.WriteLine("");
-                Assert.IsTrue(value.Value.Key <= priority, "Priority violation.");
-                priority = value.Value.Key;
+                Assert.IsTrue(value.Value.priority <= priority, "Priority violation.");
+                priority = value.Value.priority;
             }
         }
     }
