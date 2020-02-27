@@ -243,3 +243,4 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+/Ancillary.Structice/Ancillary.Structice.xml
