@@ -5,7 +5,12 @@ VisualStudioVersion = 16.0.29709.97
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ancillary.Structice", "Ancillary.Structice\Ancillary.Structice.csproj", "{D4B4CC96-BEF3-4268-81B6-DE7F791A58D6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Ancillary.Structice", "Test.Ancillary.Structice\Test.Ancillary.Structice.csproj", "{E93E8F71-BA47-4290-97C1-52E6CEF41D1D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.Ancillary.Structice", "Test.Ancillary.Structice\Test.Ancillary.Structice.csproj", "{E93E8F71-BA47-4290-97C1-52E6CEF41D1D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7388B5B8-A5DB-4DF8-BC0D-A600217953FD}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
