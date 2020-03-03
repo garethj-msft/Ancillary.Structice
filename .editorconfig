@@ -82,3 +82,6 @@ dotnet_diagnostic.SA1300.severity = none
 
 # SA1507: Code should not contain multiple blank lines in a row
 dotnet_diagnostic.SA1507.severity = suggestion
+
+# SA0001: XML comment analysis is disabled due to project configuration
+dotnet_diagnostic.SA0001.severity = error

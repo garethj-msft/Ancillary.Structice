@@ -32,7 +32,9 @@ namespace Test.Ancillary.Structice
             queue.Enqueue(32, "Thirty Two");
             queue.Enqueue(64, "Sixty Four");
             queue.Enqueue(18, "Eighteen");
+#if DEBUG
             this.TestContext.WriteLine(@"Initial: " + queue.Dump());
+#endif
             this.TestContext.WriteLine("");
 
             (int priority, string value)? value;
@@ -40,7 +42,9 @@ namespace Test.Ancillary.Structice
             while ( (value = queue.Dequeue()).HasValue)
             {
                 this.TestContext.WriteLine(value.Value.value);
+#if DEBUG
                 this.TestContext.WriteLine(@"    " + queue.Dump());
+#endif
                 this.TestContext.WriteLine("");
                 Assert.IsTrue(value.Value.priority <= priority, "Priority violation.");
                 priority = value.Value.priority;
