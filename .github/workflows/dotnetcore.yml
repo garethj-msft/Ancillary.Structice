@@ -1,4 +1,4 @@
-name: .NET Core
+name: Build and publish
 
 on: [push]
 
@@ -20,3 +20,10 @@ jobs:
       with:
         name: nugetpackage
         path: .\Ancillary.Structice\bin\Release\Ancillary.Structice.1.6.0.nupkg
+    - name: Publish NuGet
+      uses: rohith/publish-nuget@v2.1.1
+      with:  
+        PROJECT_FILE_PATH: Ancillary.Structice/Ancillary.Structice.csproj
+        TAG_COMMIT: true
+        TAG_FORMAT: v*
+        NUGET_KEY: ${{secrets.nugetapi}}
