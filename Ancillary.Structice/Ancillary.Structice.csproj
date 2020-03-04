@@ -7,7 +7,7 @@
     <Title>Ancillary.Structice</Title>
     <Authors>Gareth Jones</Authors>
     <Company>Gareth Jones</Company>
-    <Version>1.6.0</Version>
+    <Version>1.6.1</Version>
     <Description>Extra data structures and helper methods for .Net standard 1.6.</Description>
     <Copyright>(c) 2020 Gareth Jones</Copyright>
     <PackageLicenseFile>License.txt</PackageLicenseFile>
