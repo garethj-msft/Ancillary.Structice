@@ -37,17 +37,17 @@ namespace Test.Ancillary.Structice
 #endif
             this.TestContext.WriteLine("");
 
-            (int priority, string value)? value;
+            (int priority, string value)? dequeued;
             int priority = int.MaxValue;
-            while ( (value = queue.Dequeue()).HasValue)
+            while ( (dequeued = queue.Dequeue()).HasValue)
             {
-                this.TestContext.WriteLine(value.Value.value);
+                this.TestContext.WriteLine(dequeued.Value.value);
 #if DEBUG
                 this.TestContext.WriteLine(@"    " + queue.Dump());
 #endif
                 this.TestContext.WriteLine("");
-                Assert.IsTrue(value.Value.priority <= priority, "Priority violation.");
-                priority = value.Value.priority;
+                Assert.IsTrue(dequeued.Value.priority <= priority, "Priority violation.");
+                priority = dequeued.Value.priority;
             }
         }
     }
