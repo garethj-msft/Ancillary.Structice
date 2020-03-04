@@ -4,6 +4,7 @@
     <TargetFramework>netstandard1.6</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <Title>Ancillary.Structice</Title>
     <Authors>Gareth Jones</Authors>
     <Company>Gareth Jones</Company>
     <Version>1.6.0</Version>
@@ -11,6 +12,7 @@
     <Copyright>(c) 2020 Gareth Jones</Copyright>
     <PackageLicenseFile>License.txt</PackageLicenseFile>
     <RepositoryUrl>https://github.com/garethj-msft/Ancillary.Structice</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
     <NeutralLanguage>en-US</NeutralLanguage>
   </PropertyGroup>
 
