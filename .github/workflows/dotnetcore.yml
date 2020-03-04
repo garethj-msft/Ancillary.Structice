@@ -19,7 +19,7 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: nugetpackage
-        path: .\Ancillary.Structice\bin\Release\Ancillary.Structice.1.6.0.nupkg
+        path: .\Ancillary.Structice\bin\Release\Ancillary.Structice.*.nupkg
     - name: Publish NuGet
       uses: rohith/publish-nuget@v2.1.1
       with:  
