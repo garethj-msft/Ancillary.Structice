@@ -200,7 +200,7 @@ namespace Ancillary.Structice
             int count = 0;
             int lineCount = 0;
             int rowCount = 0;
-            var dump = new StringBuilder();
+            StringBuilder dump = new ();
             while (count < this.Count)
             {
                 if (count + 1 == (int)Math.Pow(2, rowCount))

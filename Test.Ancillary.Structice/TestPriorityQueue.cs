@@ -5,7 +5,6 @@
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Ancillary.Structice;
-using System.Collections.Generic;
 
 namespace Test.Ancillary.Structice
 {

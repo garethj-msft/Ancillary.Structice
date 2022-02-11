@@ -1,37 +1,32 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.6</TargetFramework>
+    <TargetFrameworks>netstandard2.0;net6.0</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <Title>Ancillary.Structice</Title>
     <Authors>Gareth Jones</Authors>
     <Company>Gareth Jones</Company>
-    <Version>1.6.1</Version>
-    <Description>Extra data structures and helper methods for .Net standard 1.6.</Description>
-    <Copyright>(c) 2020 Gareth Jones</Copyright>
+    <Version>1.7.0</Version>
+    <Description>Extra data structures and helper methods for .Net standard 2.0.</Description>
+    <Copyright>(c) 2022 Gareth Jones</Copyright>
     <PackageLicenseFile>License.txt</PackageLicenseFile>
     <RepositoryUrl>https://github.com/garethj-msft/Ancillary.Structice</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <NeutralLanguage>en-US</NeutralLanguage>
+    <LangVersion>10.0</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup>
-    <DocumentationFile>C:\Repos\Ancillary.Structice\Ancillary.Structice\Ancillary.Structice.xml</DocumentationFile>
+    <DocumentationFile>$(SolutionDir)\Ancillary.Structice\Ancillary.Structice.xml</DocumentationFile>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+  <PropertyGroup>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <WarningsAsErrors />
-  </PropertyGroup>
-
   <ItemGroup>
-    <None Remove="Ancillary.Structice.xml" />
     <None Include="..\License.txt">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
@@ -59,7 +54,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
+    <!--<PackageReference Include="System.ValueTuple" Version="4.5.0" />-->
   </ItemGroup>
 
 </Project>
