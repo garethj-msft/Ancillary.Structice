@@ -32,10 +32,37 @@ public class TestPriorityQueue
         queue.Enqueue(64, "Sixty Four");
         queue.Enqueue(18, "Eighteen");
 #if DEBUG
-            this.TestContext.WriteLine(@"Initial: " + queue.Dump());
+        this.TestContext.WriteLine(@"Initial: " + queue.Dump());
 #endif
-        this.TestContext.WriteLine("");
+        (int priority, string value)? dequeued;
+        int priority = int.MaxValue;
+        while ((dequeued = queue.Dequeue()).HasValue)
+        {
+            this.TestContext.WriteLine(dequeued.Value.value);
+#if DEBUG
+                this.TestContext.WriteLine(@"    " + queue.Dump());
+#endif
+            this.TestContext.WriteLine("");
+            Assert.IsTrue(dequeued.Value.priority <= priority, "Priority violation.");
+            priority = dequeued.Value.priority;
+        }
+    }
 
+    [TestMethod]
+    public void CrossingResizeBoundaryEnqueueCheckOrderedDequeue()
+    {
+        // CHoose a number lower than the number we enqueue.
+        var queue = new PriorityQueue<int, string>(5);
+        queue.Enqueue(100, "One Hundred");
+        queue.Enqueue(1, "One");
+        queue.Enqueue(5, "Five");
+        queue.Enqueue(75, "Seventy Five");
+        queue.Enqueue(32, "Thirty Two");
+        queue.Enqueue(64, "Sixty Four");
+        queue.Enqueue(18, "Eighteen");
+#if DEBUG
+        this.TestContext.WriteLine(@"Initial: " + queue.Dump());
+#endif
         (int priority, string value)? dequeued;
         int priority = int.MaxValue;
         while ((dequeued = queue.Dequeue()).HasValue)

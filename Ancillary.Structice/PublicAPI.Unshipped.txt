@@ -1,0 +1,10 @@
+﻿Ancillary.Structice.PriorityQueue<TPriority, TValue>
+Ancillary.Structice.PriorityQueue<TPriority, TValue>.Clear() -> void
+Ancillary.Structice.PriorityQueue<TPriority, TValue>.Count.get -> int
+Ancillary.Structice.PriorityQueue<TPriority, TValue>.Dequeue() -> (TPriority Priority, TValue Value)?
+Ancillary.Structice.PriorityQueue<TPriority, TValue>.Enqueue(TPriority priority, TValue value) -> void
+Ancillary.Structice.PriorityQueue<TPriority, TValue>.Peek() -> (TPriority Priority, TValue Value)?
+Ancillary.Structice.PriorityQueue<TPriority, TValue>.PriorityQueue() -> void
+Ancillary.Structice.PriorityQueue<TPriority, TValue>.PriorityQueue(int initialSize) -> void
+Ancillary.Structice.Utilities.StringUtilities
+static Ancillary.Structice.Utilities.StringUtilities.ThenSplit(this System.Collections.Generic.IEnumerable<string> stringSet, char separator) -> System.Collections.Generic.IEnumerable<System.Linq.IGrouping<string, string>>

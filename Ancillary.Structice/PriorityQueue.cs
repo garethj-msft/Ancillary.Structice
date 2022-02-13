@@ -4,7 +4,6 @@
 
 namespace Ancillary.Structice;
 
-using System;
 using System.Text;
 
 /// <summary>
@@ -21,7 +20,7 @@ public class PriorityQueue<TPriority, TValue>
     /// The array that the queue's values are stored in.
     /// </summary>
     /// <remarks>Valid values are in elements from 0 to Count - 1.</remarks>
-    private (TPriority priority, TValue value)[] content;
+    private QueueContentItem[] content;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="PriorityQueue{TPriority, TValue}"/> class.
@@ -36,7 +35,7 @@ public class PriorityQueue<TPriority, TValue>
     /// <param name="initialSize">The starting size of the storage that the queue is based on.</param>
     public PriorityQueue(int initialSize)
     {
-        this.content = new (TPriority, TValue)[initialSize];
+        this.content = new QueueContentItem[initialSize];
     }
 
     /// <summary>
@@ -53,7 +52,7 @@ public class PriorityQueue<TPriority, TValue>
     {
         if (this.content == null)
         {
-            this.content = new (TPriority, TValue)[DefaultSize];
+            this.content = new QueueContentItem[DefaultSize];
         }
 
         // Local functions
@@ -61,8 +60,8 @@ public class PriorityQueue<TPriority, TValue>
 
         void reallocateUp()
         {
-            (TPriority priority, TValue value)[] old = this.content;
-            this.content = new (TPriority priority, TValue value)[this.Count * 2];
+            QueueContentItem[] old = this.content;
+            this.content = new QueueContentItem[this.Count * 2];
             old.CopyTo(this.content, 0);
         }
 
@@ -82,7 +81,7 @@ public class PriorityQueue<TPriority, TValue>
             reallocateUp();
         }
 
-        this.content[this.Count] = (priority, value);
+        this.content[this.Count] = new QueueContentItem(priority, value);
         heapifyUp(this.Count);
         this.Count++;
     }
@@ -91,7 +90,7 @@ public class PriorityQueue<TPriority, TValue>
     /// Take an entry from the queue.
     /// </summary>
     /// <returns>The entry.</returns>
-    public (TPriority priority, TValue value)? Dequeue()
+    public (TPriority Priority, TValue Value)? Dequeue()
     {
         // Local functions
         int leftChild(int location) => ((location + 1) * 2) - 1;
@@ -100,11 +99,11 @@ public class PriorityQueue<TPriority, TValue>
 
         void reallocateDown()
         {
-            (TPriority priority, TValue value)[] old = this.content;
-            int newSize = ((this.Count / DefaultSize) + 1) * DefaultSize;
+            QueueContentItem[] old = this.content;
+            int newSize = this.content.Length / 2;
             if (newSize != this.content.Length)
             {
-                this.content = new (TPriority priority, TValue value)[newSize];
+                this.content = new QueueContentItem[newSize];
                 Array.Copy(old, this.content, newSize);
             }
         }
@@ -148,10 +147,10 @@ public class PriorityQueue<TPriority, TValue>
                 return null;
             case 1:
                 this.Count = 0;
-                return this.content[0];
+                return (this.content[0].priority, this.content[0].content);
             default:
                 {
-                    (TPriority, TValue) retVal = this.content[0];
+                    (TPriority, TValue) retVal = (this.content[0].priority, this.content[0].content);
                     this.Count--;
                     this.content[0] = this.content[this.Count];
                     heapifyDown(0);
@@ -169,7 +168,7 @@ public class PriorityQueue<TPriority, TValue>
     /// Look at the next entry on the queue without removing it.
     /// </summary>
     /// <returns>The entry.</returns>
-    public (TPriority priority, TValue value)? Peek()
+    public (TPriority Priority, TValue Value)? Peek()
     {
         if (this.Count == 0)
         {
@@ -177,7 +176,7 @@ public class PriorityQueue<TPriority, TValue>
         }
         else
         {
-            return this.content[0];
+            return (this.content[0].priority, this.content[0].content);
         }
     }
 
@@ -191,42 +190,42 @@ public class PriorityQueue<TPriority, TValue>
     }
 
 #if DEBUG
-        /// <summary>
-        /// Write a verbose string representation of the queue.
-        /// </summary>
-        /// <returns>The representation.</returns>
-        public string Dump()
+    /// <summary>
+    /// Write a verbose string representation of the queue.
+    /// </summary>
+    /// <returns>The representation.</returns>
+    internal string Dump()
+    {
+        int count = 0;
+        int lineCount = 0;
+        int rowCount = 0;
+        StringBuilder dump = new();
+        while (count < this.Count)
         {
-            int count = 0;
-            int lineCount = 0;
-            int rowCount = 0;
-            StringBuilder dump = new ();
-            while (count < this.Count)
+            if (count + 1 == (int)Math.Pow(2, rowCount))
             {
-                if (count + 1 == (int)Math.Pow(2, rowCount))
+                if (rowCount != 0)
                 {
-                    if (rowCount != 0)
-                    {
-                        dump.AppendLine();
-                    }
-
-                    rowCount++;
-                    lineCount = 0;
+                    dump.AppendLine();
                 }
 
-                if (lineCount != 0)
-                {
-                    dump.Append(", ");
-                }
-
-                (TPriority priority, TValue value) = this.content[count];
-                dump.Append($"{priority}:{value}");
-                count++;
-                lineCount++;
+                rowCount++;
+                lineCount = 0;
             }
 
-            return dump.ToString();
+            if (lineCount != 0)
+            {
+                dump.Append(", ");
+            }
+
+            (TPriority priority, TValue value) = this.content[count];
+            dump.Append($"{priority}:{value}");
+            count++;
+            lineCount++;
         }
+
+        return dump.ToString();
+    }
 #endif
 
     /// <summary>
@@ -236,8 +235,15 @@ public class PriorityQueue<TPriority, TValue>
     /// <param name="secondLocation">Location of second element to swap.</param>
     private void Swap(int firstLocation, int secondLocation)
     {
-        (TPriority, TValue) temp = this.content[secondLocation];
+        QueueContentItem temp = this.content[secondLocation];
         this.content[secondLocation] = this.content[firstLocation];
         this.content[firstLocation] = temp;
     }
+
+    /// <summary>
+    /// Private record type to hold the raw queue data.
+    /// </summary>
+    /// <param name="priority">The priority of the item.</param>
+    /// <param name="content">The value of the item.</param>
+    private record struct QueueContentItem(TPriority priority, TValue content);
 }
